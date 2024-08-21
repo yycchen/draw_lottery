@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡單抽獎系統</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>簡單抽獎系統</h1>
+        </header>
+        
+        <main class="main-content">
+            <section class="upload-section">
+                <input type="file" id="file-input" />
+                <button id="upload-button" class="btn">上傳名單</button>
+            </section>
+            
+            <section class="lottery-section">
+                <div id="slot" class="slot">請按下按鈕抽獎</div>
+                <button id="spin-button" class="btn">開始抽獎</button>
+                <div id="result" class="hidden result"></div>
+            </section>
+        </main>
+        
+        <aside class="side-panel">
+            <h2>參加者名單</h2>
+            <ul id="name-list" class="name-list"></ul>
+        </aside>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
