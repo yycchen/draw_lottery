@@ -37,7 +37,7 @@ document.getElementById('spin-button').addEventListener('click', () => {
     
     let count = 0;
     const maxCount = 30; // 隨機變更的次數
-    const interval = 50; // 每次變更的間隔時間，單位為毫秒
+    const interval = 30; // 每次變更的間隔時間，單位為毫秒
     
     function changeName() {
         // 隨機選擇一個名字並顯示
