@@ -95,6 +95,8 @@ header {
     border-left: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .side-panel h2 {
@@ -106,6 +108,11 @@ header {
     list-style: none;
     padding: 0;
     margin: 0;
+    max-height: 400px; /* 最大高度設置為 400px，根據需要調整 */
+    overflow-y: auto; /* 啟用垂直滾動條 */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #ffffff;
 }
 
 .name-list li {
