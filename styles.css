@@ -13,12 +13,13 @@ body {
 .container {
     display: flex;
     flex-direction: row;
-    max-width: 1200px;
+    max-width: 1200px; /* 增大最大寬度 */
     width: 100%;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
+    margin: 20px;
 }
 
 header {
@@ -30,7 +31,8 @@ header {
 
 .main-content {
     padding: 20px;
-    flex: 3;
+    flex: 2; /* 調整主內容區域的寬度比例 */
+    max-width: 700px; /* 設定最大寬度 */
 }
 
 .upload-section {
@@ -42,6 +44,11 @@ header {
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    width: 75%;
+}
+
+#upload-button {
+    margin-left: 10px;
 }
 
 .btn {
@@ -81,12 +88,12 @@ header {
     margin-top: 20px;
 }
 
-
 .result {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     color: #007BFF;
     margin-top: 20px;
+    white-space: pre-wrap;
 }
 
 .hidden {
@@ -113,8 +120,8 @@ header {
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 400px; /* 最大高度設置為 400px，根據需要調整 */
-    overflow-y: auto; /* 啟用垂直滾動條 */
+    max-height: 400px;
+    overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #ffffff;
@@ -124,8 +131,44 @@ header {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     font-size: 16px;
+    white-space: pre-wrap;
 }
 
 .name-list li:last-child {
     border-bottom: none;
+}
+
+.number-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.number-label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.input-number {
+    padding: 10px;
+    font-size: 14px; /* 減少字體大小 */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 60%; /* 縮小寬度 */
+    max-width: 200px; /* 設定最大寬度 */
+    box-sizing: border-box;
+}
+
+/* 媒體查詢 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .side-panel {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #ddd;
+    }
 }

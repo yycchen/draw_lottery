@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="簡單的抽獎系統，用於上傳參加者名單並隨機選擇中獎者。">
     <title>簡單抽獎系統</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,6 +21,10 @@
             
             <section class="lottery-section">
                 <div id="slot" class="slot">請按下按鈕抽獎</div>
+                <div class="number-input-container">
+                    <label for="num-winners" class="number-label">中獎人數：</label>
+                    <input type="number" id="num-winners" class="input-number" min="1" value="1" />
+                </div>
                 <button id="spin-button" class="btn">開始抽獎</button>
                 <div id="result" class="hidden result"></div>
             </section>

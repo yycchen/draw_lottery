@@ -1,7 +1,7 @@
-// script.js
-let names = []; // 存儲參加者名字的陣列
+let participants = [];    // name array
+let displayNames = [];    // name array (without reprtition)
 
-// 處理文件上傳
+// upload the file
 document.getElementById('upload-button').addEventListener('click', () => {
     const fileInput = document.getElementById('file-input');
     const file = fileInput.files[0];
@@ -10,10 +10,35 @@ document.getElementById('upload-button').addEventListener('click', () => {
         const reader = new FileReader();
         
         reader.onload = function(event) {
-            const fileContent = event.target.result;
-            names = fileContent.split('\n').map(name => name.trim()).filter(name => name.length > 0);
-            updateNameList(); // 更新顯示的參加者名單
-            alert('名單已成功上傳');
+            try {
+                const fileContent = event.target.result;
+                texts = fileContent.split('\n').map(name => name.trim()).filter(name => name.length > 0);
+                texts.forEach(text => {
+                    const item = {
+                        'name': text.split(" ")[0],
+                        'comment': text.split(" ").slice(1).join(" ")
+                    };
+
+                    const pattern = /@\w+/g;
+                    const matches = item.comment.match(pattern);
+                    const atLeastTwoMentions = matches && matches.length >= 2;
+
+                    if (atLeastTwoMentions) {
+                        participants.push(item);
+                    }
+                });
+
+                const names = participants.map(item => item.name);
+                displayNames = Array.from(new Set(names));    // get the unique name list
+                updateNameList();                             // update the name list
+                alert('名單已成功上傳');
+            } catch (error) {
+                alert('讀取文件時出錯');
+            }
+        };
+        
+        reader.onerror = function() {
+            alert('文件讀取失敗');
         };
         
         reader.readAsText(file);
@@ -22,50 +47,86 @@ document.getElementById('upload-button').addEventListener('click', () => {
     }
 });
 
-// 開始抽獎
+// start the lucky draw
 document.getElementById('spin-button').addEventListener('click', () => {
-    if (names.length === 0) {
+    if (participants.length === 0) {
         alert('名單為空，請上傳參加者名單');
+        return;
+    }
+    
+    let numWinners = parseInt(document.getElementById('num-winners').value, 10);
+
+    if (isNaN(numWinners) || numWinners < 1) {
+        numWinners = 1;
+    }
+    
+    if (numWinners > participants.length) {
+        alert('抽獎人數不能大於參加者人數');
         return;
     }
     
     const slot = document.getElementById('slot');
     const resultDiv = document.getElementById('result');
     
-    const finalIndex = Math.floor(Math.random() * names.length); // 隨機選擇最終中獎者
-    const finalName = names[finalIndex];
+    // get winner(s)
+    let winners = [];
     
-    let count = 0;
-    const maxCount = 30; // 隨機變更的次數
-    const interval = 30; // 每次變更的間隔時間，單位為毫秒
-    
-    function changeName() {
-        // 隨機選擇一個名字並顯示
-        const randomIndex = Math.floor(Math.random() * names.length);
-        slot.textContent = names[randomIndex];
-        
-        if (count < maxCount) {
-            count++;
-            setTimeout(changeName, interval); // 每 `interval` 毫秒變更一次
-        } else {
-            // 最終顯示中獎者
-            slot.textContent = finalName;
-            resultDiv.textContent = `中獎者是: ${finalName}`;
-            resultDiv.classList.remove('hidden');
+    function getWinners() {
+        winners = [];
+        while (winners.length < numWinners) {
+            const randomIndex = Math.floor(Math.random() * participants.length);
+            const winner = participants[randomIndex];
+            if (!winners.some(item => item.name === winner.name)) {
+                winners.push(winner);
+            }
         }
     }
 
-    changeName(); // 開始變更名字
+    getWinners();
+
+    const maxCount = 50;    // times for randomly display names
+    const interval = 30;    // interval between every displays (in ms)
+    resultDiv.textContent = '';
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function changeName() {
+        for (let currentWinnerIndex = 0; currentWinnerIndex < numWinners; currentWinnerIndex++) {
+            // randomly show participants
+            for (let count = 0; count < maxCount; count++) {
+                const randomIndex = Math.floor(Math.random() * displayNames.length);
+                slot.textContent = displayNames[randomIndex];
+                await sleep(interval);
+            }
+
+            // show the winner's name
+            const winner = winners[currentWinnerIndex];
+            if (winner) {
+                slot.textContent = winner.name;
+                const showText = winner.name + " " + winner.comment;
+                resultDiv.textContent = resultDiv.textContent + "\n" + `第 ${currentWinnerIndex + 1} 位中獎者: ${showText}`;
+                resultDiv.classList.remove('hidden');
+            } else {
+                alert('抽獎結果出錯，無法顯示中獎者。');
+            }
+
+            await sleep(2000);
+        }
+    }
+
+    changeName();     // start lucky draw
 });
 
-// 更新參加者名單
+// update the participants list
 function updateNameList() {
     const nameList = document.getElementById('name-list');
-    nameList.innerHTML = ''; // 清空名單
+    nameList.innerHTML = '';    // clear the name list
     
-    names.forEach(name => {
+    participants.forEach(item => {
         const li = document.createElement('li');
-        li.textContent = name;
+        li.textContent = item.name + "\n" + item.comment;
         nameList.appendChild(li);
     });
 }
